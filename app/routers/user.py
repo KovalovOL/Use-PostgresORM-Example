@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, Query, Path
 from sqlalchemy.orm import Session
 from typing import Optional
+
 from app.db.database import get_db
 from app.schemas import user as user_schemas
 from app.crud import user as user_crud
 
+
 router = APIRouter()
+
 
 @router.get("/")
 async def get_user(user_id: int = Query(None, ge=0), db: Session = Depends(get_db)):

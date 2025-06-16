@@ -7,6 +7,7 @@ from app.db import models
 from app.schemas import post as post_schemas
 from app.crud import post as post_crud
 
+
 router = APIRouter()
 
 
