@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query, Path
 from sqlalchemy.orm import Session
-from typing import Optional
 from datetime import datetime
 
 from app.db.database import get_db
@@ -13,10 +12,10 @@ router = APIRouter()
 
 @router.get("/")
 async def get_post(
-    post_id: Optional[int] = None,
-    user_id: Optional[int] = None,
-    title: Optional[str] = None,
-    time: Optional[datetime] = None, 
+    post_id: int = Query(None, ge=0),
+    user_id: int = Query(None, ge=0),
+    title: str = Query(None, max_length=50),
+    time: datetime = Query(None), 
     db: Session = Depends(get_db)):
 
    filters = []
@@ -32,6 +31,6 @@ async def get_post(
 async def create_post(post: post_schemas.CreatePost, db: Session = Depends(get_db)):
     return post_crud.create_post(db=db, post=post)
 
-@router.delete("/")
-async def delete_post(post_id: int, db: Session = Depends(get_db)):
+@router.delete("/{post_id}")
+async def delete_post(post_id: int = Path(..., ge=0), db: Session = Depends(get_db)):
     return post_crud.delete_post(db=db, post_id=post_id)

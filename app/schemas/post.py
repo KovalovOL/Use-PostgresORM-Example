@@ -1,9 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 
 class CreatePost(BaseModel):
-    title: str
-    text: str
+    title: str = Field(..., max_length=50)
+    text: str = Field(..., max_length=200)
     user_id: int
 
 class Post(CreatePost):

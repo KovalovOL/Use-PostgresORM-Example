@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class CreateUser(BaseModel):
-    name: str
+    name: str = Field(..., max_length=25)
 
 class User(CreateUser):
     id: int
