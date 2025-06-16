@@ -1,0 +1,6 @@
+.vevn/
+.env
+*__pycache__
+.git/
+.vscode/
+.idea/
