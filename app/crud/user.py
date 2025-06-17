@@ -2,11 +2,14 @@ from sqlalchemy.orm import Session
 from app.db import models
 from app.schemas import user as user_schemas
 
-def get_all_users(db: Session):
-    return db.query(models.User).all()
 
-def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+def get_user(db: Session, filter: user_schemas.UserFilter):
+    conditions = []
+
+    if filter.id is not None: conditions.append(models.User.id == filter.id)
+    if filter.name is not None: conditions.append(models.User.name == filter.name)
+
+    return db.query(models.User).filter(*conditions).all()
 
 def create_user(db: Session, user: user_schemas.CreateUser):
     db_user = models.User(name=user.name)
