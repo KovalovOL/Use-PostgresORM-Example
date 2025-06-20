@@ -33,6 +33,14 @@ async def get_post(
 async def create_post(post: post_schemas.CreatePost, db: Session = Depends(get_db)) -> post_schemas.Post:
     return post_crud.create_post(db=db, post=post)
 
+@router.put("/{post_id}")
+async def update_user(
+    data: post_schemas.UpdatePost,
+    post_id: int = Path(..., ge=0),
+    db: Session = Depends(get_db)) -> post_schemas.Post:
+
+    return post_crud.update_post(db=db, post_id=post_id, post_update=data)
+
 @router.delete("/{post_id}")
 async def delete_post(post_id: int = Path(..., ge=0), db: Session = Depends(get_db)) -> post_schemas.Post:
     return post_crud.delete_post(db=db, post_id=post_id)

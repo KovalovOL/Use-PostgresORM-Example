@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.db import models
 from app.schemas import post as post_schemas
@@ -23,6 +24,26 @@ def create_post(db: Session, post: post_schemas.CreatePost):
     db.commit()
     db.refresh(db_post)
     return db_post
+
+def update_post(db: Session, post_id: int, post_update: post_schemas.UpdatePost):
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+
+    if not post:
+        raise HTTPException(status_code=404, detail=f"Post with id {post_id} not found")
+    
+    if post_update.new_title is not None:
+        post.title = post_update.new_title
+    if post_update.new_text is not None:
+        post.text = post_update.new_text
+    if post_update.new_user_id is not None:
+        if db.query(models.User).filter(models.User.id == post_update.new_user_id).first():
+            post.user_id = post_update.new_user_id
+        else:
+            raise HTTPException(status_code=404, detail=f"User with id {post_update.new_user_id} not found")
+    
+    db.commit()
+    db.refresh(post)
+    return post
 
 def delete_post(db: Session, post_id: int):
     db_post = db.query(models.Post).filter(models.Post.id == post_id).first()

@@ -27,6 +27,14 @@ async def get_user(
 async def create_user(user: user_schemas.CreateUser, db: Session = Depends(get_db)) -> user_schemas.User:
     return user_crud.create_user(db=db, user=user)
 
+@router.put("/{user_id}")
+async def update_user(
+    data: user_schemas.UpdateUser,
+    user_id: int = Path(..., ge=0),
+    db: Session = Depends(get_db)) -> user_schemas.User:
+
+    return user_crud.update_user(user_id=user_id, user_update=data, db=db)
+
 @router.delete("/{user_id}")
 async def delete_user(user_id: int = Path(..., ge=0), db: Session = Depends(get_db)) -> user_schemas.User:
     return user_crud.delete_user(db=db, user_id=user_id)

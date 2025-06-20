@@ -10,3 +10,6 @@ class User(CreateUser):
 class UserFilter(BaseModel):
     id: Optional[int] = Field(None, ge=0)
     name: Optional[str] = Field(None, max_length=25)
+
+class UpdateUser(BaseModel):
+    new_name: Optional[str] = Field(None, max_length=25)

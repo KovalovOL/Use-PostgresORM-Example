@@ -18,6 +18,18 @@ def create_user(db: Session, user: user_schemas.CreateUser):
     db.refresh(db_user)
     return db_user
 
+def update_user(db: Session, user_id: int, user_update: user_schemas.UpdateUser):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
+    if not user: 
+        return None
+    
+    if user_update.new_name is not None: user.name = user_update.new_name
+
+    db.commit()
+    db.refresh(user)
+    return user
+    
 def delete_user(db: Session, user_id: int):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user:

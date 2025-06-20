@@ -16,3 +16,8 @@ class PostFilter(BaseModel):
     user_id: Optional[int] = Field(None, ge=0)
     title: Optional[str] = Field(None, max_length=50)
     time_create: Optional[datetime] = Field(None)
+
+class UpdatePost(BaseModel):
+    new_title: Optional[str] = Field(None, max_length=50)
+    new_text: Optional[str] = Field(None, max_length=200)
+    new_user_id: Optional[int] = Field(None, ge=0)
